@@ -10,12 +10,27 @@ import ToDo from './components/ToDo.js';
          { description: 'Quit drinking on week nights', isCompleted: false },
          { description: 'Go camping', isCompleted: false },
          { description: 'Laundry', isCompleted: true }
-       ]
-     }
+       ],
+       newToDoDescription: ''
+     };
+   }
+
+   handleChange(e) {
+     this.setState({ newTodoDescription: e.target.value })
+   }
+
+   handleSubmit(e) {
+     e.preventDefault();
+     if (!this.state.newTodoDescription) { return }
+     const newTodo = { description: this.state.newTodoDescription, isCompleted: false };
+     this.setState({ todos: [...this.state.todos, newTodo], newTodoDescription: '' });
    }
 
    toggleComplete(index) {
-    console.log(index)
+    const todos = this.state.todos.slice();
+    const todo = todos[index];
+    todo.isCompleted = todo.isCompleted ? false : true;
+    this.setState({ todos: todos });
   }
 
    render() {
@@ -26,6 +41,11 @@ import ToDo from './components/ToDo.js';
             <ToDo key ={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } />
           )}
          </ul>
+         <form onSubmit={ (e) => this.handleSubmit(e) }>
+              <input type="text" value={ this.state.newTodoDescription } onChange={ (e) => this.handleChange(e) } />
+           <input type="submit" />
+         </form>
+
      </div>
      );
    }
